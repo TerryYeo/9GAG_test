@@ -1,3 +1,8 @@
+"""Running python in Anaconda environment and coding on Jupyter Notebook. 
+Using NLTK library and Scikit-learn for Nature Language Processing and Machine Learning.
+Using pandas for dataframe data structure.
+I have built four model including Naive Bayes, Decision Tree, BernoulliNB and SVM."""
+
 from nltk.classify import SklearnClassifier
 from sklearn.naive_bayes import BernoulliNB
 from sklearn.svm import SVC
@@ -7,20 +12,19 @@ from nltk.classify import NaiveBayesClassifier
 import numpy as np
 import pandas as pd
 
-
+#Reading data and create a dataframe
 df = pd.read_csv('/home/terry/Downloads/text_emotion.csv')
 
+#Tokenize the sentence to words and 
 tweets = []
 for index, row in df[['content', 'sentiment']].iterrows():
     line = str(row['content']).decode('utf-8','ignore')
     for e in nltk.word_tokenize(line):
-    #for e in nltk.word_tokenize(str(row['content'])):
         if len(e) >= 3 and str(row['sentiment']) != 'empty':
             tweets.append((e.lower(), str(row['sentiment'])))
 shuffle(tweets)
 
 newTweets = []
-
 for (word, sentiment) in tweets: 
     if word not in stopwords.words('english'):
         newTweets.append(({'feature':word}, sentiment)) 
