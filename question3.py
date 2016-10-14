@@ -15,54 +15,59 @@ import pandas as pd
 #Reading data and create a dataframe
 df = pd.read_csv('/home/terry/Downloads/text_emotion.csv')
 
-#Tokenize the sentence to words and 
+#Tokenize the sentence to words and filter the sentence with "empty" sentiment and some short words (it is not useful)
 tweets = []
 for index, row in df[['content', 'sentiment']].iterrows():
     line = str(row['content']).decode('utf-8','ignore')
     for e in nltk.word_tokenize(line):
         if len(e) >= 3 and str(row['sentiment']) != 'empty':
             tweets.append((e.lower(), str(row['sentiment'])))
-shuffle(tweets)
+            
+#Shuffling the data to let them be random
+shuffle(tweets) 
 
+#Using nltk stopwords function to filter some common useless words
 newTweets = []
 for (word, sentiment) in tweets: 
     if word not in stopwords.words('english'):
         newTweets.append(({'feature':word}, sentiment)) 
-        
-poscutoff = len(newTweets)*3/4
- 
+
+#Segregating data to 3/4 for training and 1/4 for testing
+poscutoff = len(newTweets)*3/4 
 trainfeats = newTweets[:poscutoff][:]
 testfeats = newTweets[poscutoff:][:]
 
+#Getting out the feature of testing data for preticting test later
 testdata = []
 for (dist, sentiment) in testfeats:
     testdata.append(dist)
 
 #Naive Bayes Classifier accuracy: 0.317835365854(approximately) with testing new data
 #accuracy: 0.559451219512 with testing part of the training data
-classifier = nltk.NaiveBayesClassifier.train(newTweets)#trainfeats)
+classifier = nltk.NaiveBayesClassifier.train(trainfeats)
 predict = classifier.classify_many(testdata)
 classifier.show_most_informative_features()
 #print(predict)
 
 #Decision Tree accuracy: 0.178353658537(approximately) with testing new data
 #accuracy: 0.640243902439 with testing part of the training data
-classifier2 = nltk.classify.DecisionTreeClassifier.train(newTweets, entropy_cutoff=0, support_cutoff=0)
+classifier2 = nltk.classify.DecisionTreeClassifier.train(trainfeats, entropy_cutoff=0, support_cutoff=0)
 predict2 = classifier2.classify_many(testdata)
 #print(predict2)
 
 #BernoulliNB accuracy: 0.321646341463(approximately) with testing new data
 #accuracy: 0.475609756098 with testing part of the training data
-classif = SklearnClassifier(BernoulliNB()).train(newTweets)#trainfeats)
+classif = SklearnClassifier(BernoulliNB()).train(trainfeats)
 predict3 = classif.classify_many(testdata)
 #print(predict3)
 
 #SVM accuracy: 0.326219512195(approximately) with testing new data
 #accuracy: 0.326219512195 with testing part of the training data
-classif2 = SklearnClassifier(SVC(), sparse=False).train(newTweets)#trainfeats)
+classif2 = SklearnClassifier(SVC(), sparse=False).train(trainfeats)
 predict4 = classif2.classify_many(testdata)
 #print(predict4)
 
+#Printing the result of model accuracy by using testing data
 print 'accuracy:', nltk.classify.util.accuracy(classifier, testfeats)
 print 'accuracy:', nltk.classify.util.accuracy(classifier2, testfeats)
 print 'accuracy:', nltk.classify.util.accuracy(classif, testfeats)
