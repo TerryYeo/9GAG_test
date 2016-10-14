@@ -154,3 +154,31 @@ object StructuredNetworkWordCount {
     query.awaitTermination()
   }
 }
+
+
+/**
+ * These are some results from the above code:
+ *
+ * ====The number of data in server1.txt from 9gag.com====
+ * 557119
+ * ====The number of data in server2.txt from 9gag.com====
+ * 542201
+ * ====The number of data in server1.txt from 9gag.tv====
+ * 60612
+ * ====The number of data in server2.txt from 9gag.tv====
+ * 60756
+ * ====The number of data in server1.txt from 9gag.com after filtering====
+ * res73: Long = 557092
+ * ====The number of data in server2.txt from 9gag.com after filtering====
+ * res75: Long = 542174
+ * ====The number of data in server1.txt from 9gag.tv after filtering====
+ * res77: Long = 60612
+ * ====The number of data in server2.txt from 9gag.tv after filtering====
+ * res79: Long = 60756
+ * ====The number of distinct number of users who visited both 9GAG.com====
+ * res82: Long = 41388
+ * ====The number of distinct number of users who visited 9GAG.tv====
+ * res85: Long = 50915
+ * ====The number of distinct number of users who visited both 9GAG.com and 9GAG.tv====
+ * res88: Long = 65934
+ */
